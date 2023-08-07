@@ -34,7 +34,7 @@ function display_error() {
 
 # Function to detect the environment and set options accordingly
 function set_options() {
-  if [[ "$ENVIRONMENT" == "productiona" ]]; then
+  if [[ "$ENVIRONMENT" == "production" ]]; then
     set -euxo pipefail
   else
     set -e
