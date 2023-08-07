@@ -4,12 +4,12 @@ This file tracks tasks: pending, in progress and completed.
 
 ### Pending
 
-- [ ] Create Ansible files (config, roles and playbooks)
+Empty for now
 
 ### In Progress
 
-- [ ] Create Terraform files
+- [ ] Create Ansible files (config, roles and playbooks)
 
 ### Done ✓
 
-Empty for now 
+- [x] Create Terraform files
