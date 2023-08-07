@@ -33,6 +33,7 @@ Automate your Minecraft Network infrastructure with ease! This project configure
 - `terraform/`: Contains the Terraform configuration files.
 - `vagrant/`: Contains the Vagrant configuration files.
 - `deploy.sh`: The main script/wrapper for all functions.
+- `LICENSE`: The project's license file.
 - `README.md`: This file provides an overview of the project.
 - `TODO.md`: This file tracks pending and completed tasks.
 
