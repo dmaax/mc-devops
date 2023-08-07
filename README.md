@@ -72,3 +72,7 @@ To run the Ansible playbook:
 ```
 
 For more examples please refer to the `show_usage` function in `deploy.sh`.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
