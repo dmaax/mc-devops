@@ -6,6 +6,9 @@
   <a aria-label="Ansible version" href="https://www.ansible.com/">
     <img src="https://img.shields.io/badge/v8.2.0-000.svg?logo=Ansible&labelColor=000&style=for-the-badge">
   </a>
+    <a aria-label="Python version" href="https://www.python.org/">
+    <img alt="" src="https://img.shields.io/badge/v3.9-000.svg?logo=python&style=for-the-badge">
+  </a>
   <a aria-label="Terraform version" href="https://www.terraform.io/">
     <img alt="" src="https://img.shields.io/badge/v1.5.4-000.svg?logo=terraform&logoColor=7B42BC&style=for-the-badge">
   </a>
@@ -24,6 +27,7 @@ Automate your Minecraft Network infrastructure with ease! This project configure
 ## Prerequisites
 
 - [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) - Version 8.2.0 or higher
+- [Python](https://www.python.org/downloads) - Version 3.9 or higher
 - [Terraform](https://developer.hashicorp.com/terraform/downloads) - Version 1.5.4 or higher
 - [Vagrant](https://developer.hashicorp.com/vagrant/downloads) - Version 2.3.7 or higher
 - [VirtualBox](https://www.virtualbox.org/wiki/Downloads) - Version 7.0.10 or higher
