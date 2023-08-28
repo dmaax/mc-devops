@@ -1,0 +1,10 @@
+---
+- name: Ensure ufw package is not installed
+  ansible.builtin.apt:
+    name:
+      - ufw
+    state: absent
+    purge: true
+  become: true
+  notify:
+    - Reboot Server

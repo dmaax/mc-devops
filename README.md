@@ -73,7 +73,7 @@ To apply Terraform configuration and create infrastructure:
 
 To run the Ansible playbook:
 ```bash
-./deploy.sh ansible run main.yml
+./deploy.sh ansible run development.ini everything-playbook.yml
 ```
 
 For more examples please refer to the `show_usage` function in `deploy.sh`.

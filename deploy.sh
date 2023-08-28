@@ -23,7 +23,7 @@ function show_usage() {
   echo "Example:"
   echo "  To start Vagrant VM: ./deploy.sh vagrant up"
   echo "  To run Terraform plan: ./deploy.sh terraform plan"
-  echo "  To run Ansible playbook: ./deploy.sh ansible run playbook.yml"
+  echo "  To run Playbook everything-playbook.yml using the development inventory: ./deploy.sh ansible run development.ini everything-playbook.yml"
 }
 
 # Function to display error messages and exit
@@ -117,7 +117,7 @@ case "$tool" in
         ;;
       *)
         show_usage
-        display_error "Invalid action for Ansible. Use [run playbook.yml]."
+        display_error "Invalid action for Ansible. Use [run <inventory> playbook.yml]."
         ;;
     esac
     ;;

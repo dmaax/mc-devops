@@ -1,0 +1,5 @@
+---
+- name: Restart OpenSSH
+  ansible.builtin.service:
+    name: sshd
+    state: restarted

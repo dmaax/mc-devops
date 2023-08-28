@@ -1,0 +1,15 @@
+---
+- name: Nix Playbook
+  hosts: all
+  become: false
+
+  pre_tasks:
+  - name: Update package cache
+    ansible.builtin.apt:
+      update_cache: true
+      upgrade: dist
+      cache_valid_time: 3600
+    become: true
+
+  roles:
+    - roles/nix

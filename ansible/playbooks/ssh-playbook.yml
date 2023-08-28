@@ -1,0 +1,14 @@
+---
+- name: SSH Playbook
+  hosts: all
+  become: yes
+
+  pre_tasks:
+  - name: Update package cache
+    ansible.builtin.apt:
+      update_cache: true
+      upgrade: dist
+    become: true
+
+  roles:
+    - roles/ssh

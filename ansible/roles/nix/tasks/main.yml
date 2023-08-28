@@ -1,0 +1,100 @@
+---
+- name: "Test whether nix binary exists"
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/.nix-profile/bin/nix-env"
+  become: false
+  register: nix_env_binary
+
+- name: Creating /nix directory
+  ansible.builtin.file:
+    path: /nix
+    state: directory
+    mode: '0755'
+    owner: "{{ ansible_env.USER | default('root') }}"
+  become: true
+  when: not nix_env_binary.stat.exists
+
+- name: Installing nix dependencies for Debian-based systems
+  ansible.builtin.apt:
+    pkg: "{{ item }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+  with_items:
+    - curl
+    - bzip2
+    - ca-certificates
+    - libdigest-sha-perl
+  become: true
+  when: 'not nix_env_binary.stat.exists and ansible_os_family == "Debian"'
+
+- name: Installing nix dependencies for Redhat-based systems
+  ansible.builtin.package:
+    pkg: "{{ item }}"
+    state: present
+  with_items:
+    - bzip2
+    - perl-Digest-SHA
+  become: true
+  when: 'not nix_env_binary.stat.exists and ansible_os_family == "RedHat"'
+
+- name: Downloading nix installer script
+  become: false
+  ansible.builtin.get_url:
+    url: "{{ nix_installer_url }}"
+    dest: "/tmp/nix_install.sh"
+    mode: '0755'
+
+- name: Applying fix to enable nix install as root
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/nix/nix.conf
+    line: 'build-users-group ='
+    create: true
+    mode: '0644'
+  when: 'ansible_env.USER is not defined or ansible_env.USER == "root"'
+
+- name: Running nix installer
+  become: false
+  ansible.builtin.command: /tmp/nix_install.sh
+  args:
+    creates: "{{ ansible_env.HOME }}/.nix-profile/bin/nix-env"
+  environment:
+    USER: "{{ ansible_env.USER | default('root') }}"
+    ALLOW_PREEXISTING_INSTALLATION: "x"
+  when: "ansible_os_family != 'Darwin'"
+
+- name: Running nix installer on Mac OS X
+  become: false
+  ansible.builtin.command: /tmp/nix_install.sh
+  args:
+    creates: "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
+  environment:
+    USER: "{{ ansible_env.USER | default('root') }}"
+    ALLOW_PREEXISTING_INSTALLATION: "x"
+  when: "ansible_os_family == 'Darwin'"
+
+- name: Ensure ~/.config directory exists with proper permissions
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config"
+    state: directory
+    mode: '0755'
+  become: false
+
+- name: Ensure ~/.config/nix directory exists with proper permissions
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config/nix"
+    state: directory
+    mode: '0755'
+  become: false
+
+- name: Add content to nix.conf
+  ansible.builtin.copy:
+    content: "{{ lookup('file', 'templates/nix.conf') }}"
+    dest: "{{ ansible_env.HOME }}/.config/nix/nix.conf"
+    mode: '0644'
+  when:
+    - ansible_env.HOME is defined
+    - ansible_env.HOME != ""
+    - ansible_env.HOME is match('^/home/')
+  become: false

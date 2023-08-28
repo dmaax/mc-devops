@@ -1,0 +1,31 @@
+---
+- name: Check/create the admin group
+  ansible.builtin.group:
+    name: admin
+    state: present
+
+- name: Allow admin group to have passwordless sudo
+  ansible.builtin.lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%admin'
+    line: '%admin ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
+- name: Create the default users
+  ansible.builtin.user:
+    name: "{{ item }}"
+    groups:
+      - admin
+    append: true
+    state: present
+    create_home: true
+    shell: /bin/bash
+  loop: "{{ default_users }}"
+
+- name: Add the default users public ssh keys
+  ansible.posix.authorized_key:
+    user: "{{ item }}"
+    state: present
+    key: "{{ lookup('file', '../ssh_keys/{{ item }}_public_ssh_key') }}"
+  loop: "{{ default_users }}"
