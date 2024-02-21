@@ -1,0 +1,24 @@
+---
+- name: Install minikube from binary
+  ansible.builtin.get_url:
+    url: https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+    dest: /usr/local/bin/minikube
+    mode: '+x'
+
+- name: Install kubectl from binary
+  ansible.builtin.get_url:
+    url: https://dl.k8s.io/release/{{ stable_version }}/bin/linux/amd64/kubectl
+    dest: /usr/local/bin/kubectl
+    mode: '+x'
+
+- name: Install helm if not exists
+  unarchive:
+    src: https://get.helm.sh/helm-v3.14.1-linux-amd64.tar.gz
+    dest: /usr/local/bin
+    extra_opts: "--strip-components=1"
+    owner: root
+    group: root
+    mode: 0755
+    remote_src: true
+  args:
+    creates: /usr/local/bin/helm
