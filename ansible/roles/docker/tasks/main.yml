@@ -1,0 +1,50 @@
+---
+- name: Install required system packages
+  ansible.builtin.apt:
+    pkg:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+      - python3-pip
+      - virtualenv
+      - python3-setuptools
+    state: present
+    update_cache: true
+
+- name: Add Docker GPG apt Key
+  ansible.builtin.apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker Repository
+  ansible.builtin.apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu jammy stable
+    state: present
+
+- name: Update apt and install docker-ce
+  ansible.builtin.apt:
+    name: docker-ce
+    state: present
+    update_cache: true
+
+- name: Install Docker Modules for Python
+  ansible.builtin.pip:
+    name:
+      - docker
+      - docker-compose
+
+- name: Add default users to docker group
+  ansible.builtin.user:
+    name: "{{ item }}"
+    groups:
+      - docker
+    append: true
+  loop: "{{ default_users }}"
+
+- name: Install docker-compose from github
+  remote_user: vagrant
+  ansible.builtin.get_url:
+    url: https://github.com/docker/compose/releases/download/v2.20.3/docker-compose-linux-x86_64
+    dest: /usr/local/bin/docker-compose
+    mode: '+x'

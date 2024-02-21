@@ -1,0 +1,6 @@
+---
+default_users:
+  - 'mc'
+
+docker_compose:
+  url: ""
